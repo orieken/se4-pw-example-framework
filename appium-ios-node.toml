@@ -1,0 +1,13 @@
+[server]
+port = 5556
+
+[node]
+detect-drivers = false
+
+[relay]
+url = "http://host.docker.internal:4724"
+status-endpoint = "/status"
+
+[[relay.configs]]
+max-sessions = 1
+stereotype = '{"browserName": "iPhone 12 Pro Max", "platformName": "iOS", "appium:platformVersion": "15.0"}'

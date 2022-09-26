@@ -1,0 +1,75 @@
+version: "4"
+services:
+  grid-4:
+    container_name: grid-4
+    image: selenium/hub:4.4
+    environment:
+      - GRID_TIMEOUT=140
+      - GRID_BROWSER_TIMEOUT=120
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  chrome:
+    container_name: chrome
+    image: selenium/node-chrome:4.4
+    shm_size: 2gb
+    depends_on:
+      - grid-4
+    environment:
+      - SE_EVENT_BUS_HOST=grid-4
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - NODE_MAX_INSTANCES=1
+      - NODE_MAX_SESSION=1
+
+  firefox:
+    container_name: firefox
+    image: selenium/node-firefox:4.4
+    shm_size: 2gb
+    depends_on:
+      - grid-4
+    environment:
+      - SE_EVENT_BUS_HOST=grid-4
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - NODE_MAX_INSTANCES=1
+      - NODE_MAX_SESSION=1
+
+  edge:
+    container_name: edge
+    image: selenium/node-edge:4.4
+    shm_size: 2gb
+    depends_on:
+      - grid-4
+    environment:
+      - SE_EVENT_BUS_HOST=grid-4
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - NODE_MAX_INSTANCES=1
+      - NODE_MAX_SESSION=1
+
+#  ios:
+#    container_name: appium-ios-1
+#    image: selenium/node-docker:4.4
+#    depends_on:
+#      - grid-4
+#    volumes:
+#      - "${PWD}/appium-ios-node.toml:/opt/bin/config.toml"
+#    environment:
+#      - SE_EVENT_BUS_HOST=grid-4
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#
+#  android:
+#    container_name: appium-android-1
+#    image: selenium/node-docker:4.4
+#    depends_on:
+#      - grid-4
+#    volumes:
+#      - "${PWD}/appium-android-node.toml:/opt/bin/config.toml"
+#    environment:
+#      - SE_EVENT_BUS_HOST=grid-4
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
